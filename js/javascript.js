@@ -36,14 +36,14 @@ window.addEventListener('DOMContentLoaded', function () {
 
     /* Таймер */
 
-    let deadline = '2022-02-12';
+    let deadline = '2022-02-15';
     function getTimeCount(endtime){  
                                   /* Делаем расчет параметров времени через секунды  разбирает строковое представление даты и возвращает количество миллисекунд, прошедших с 1 января 1970 */
         let t = Date.parse(endtime)- Date.parse(new Date()), /* техническая переменная для расчета разницы времени между конечной и текущей датой */
             seconds = Math.floor((t/1000) %60),         /* округляем значение рачета и % 60 берем конечное значение секунд */
             minutes = Math.floor((t/(1000*60)) %60),      /* округляем значение рачета и % 60 берем конечное значение минут */
-            hours = Math.floor(t/(1000*60*60)),
-            days = Math.floor ((t/(1000*60*60)) % 24);   /* округляем значение рачета и % 60 берем конечное значение часов */
+            hours = Math.floor(t/(1000*60*60) %24),
+            days = Math.floor ((t/(1000*60*60*24)) % 30);   /* округляем значение рачета и % 60 берем конечное значение часов */
             return {                                    /* возвращаем полученные значения в агумент функции */
                 'total':t,
                 'days': days,
@@ -82,8 +82,36 @@ window.addEventListener('DOMContentLoaded', function () {
     }
     initializeClock ('timer', deadline);                 /* вызываем функцию обратного отсчета */
 
+/* Модальное окно */
+
+let more = document.querySelector ('.more'),
+    overlay = document.querySelector ('.overlay'),
+     close = document.querySelector ('.popup-close');
+
+more.addEventListener ('click', function () {
+    overlay.style.display = 'block';
+    this.classList.add ('more-splash');
+    document.body.style.overflow = 'hidden';
+});
+
+close.addEventListener ('click', function() {
+    overlay.style.display = 'none';
+    this.classList.remove('more-splash');
+    document.body.style.overflow = '';  
+});
+
+let descBtn = document.querySelector ('.description-btn');
+descBtn.addEventListener ('click', function (){
+    overlay.style.display = 'block';
+    this.classList.add ('fade');
+
+});
+
+/*  */
+
 });
  
+
 
 
 
