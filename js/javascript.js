@@ -106,7 +106,7 @@ descBtn.addEventListener ('click', function (){
     this.classList.add ('fade');
 
 });
-       /*  Отправка формы запроса на сервер */
+       /*  Отправка формы запроса на сервер из модального окна */
 
 let message = {
     loading: 'Загрузка...',
@@ -164,9 +164,39 @@ for (let i = 0; i < input.length; i++) {
 }
 /*  создаем услове для очистки полей input после отправки сообщений серверу */
 
-
 });
 
+/* Создаем запрос на сервер из формы обратной связи */
+
+let form1 = document.getElementById ('form'),
+    input1 = form1.getElementsByTagName('input');
+
+form1.addEventListener ('submit', function(event) {
+    event.preventDefault();
+
+let request1 = new XMLHttpRequest ();
+    request1.open ('POST', 'server.php');
+    request1.setRequestHeader ('Content-Type', 'application/json; charset=utf-8'); /* ('Content-Type', 'application/x-www-form-urlencoded'); */
+
+
+let formData1 = new FormData (form1);
+    // request1.send(formData1);
+    
+let obj = {};
+ formData1.forEach(function (value, key){
+        obj[key] = value;
+    });
+    let json = JSON.stringify(obj);
+
+request1.send(json);
+
+for (let i = 0; i < input1.length; i++) {
+    input1[i].value = ''; 
+}
+ 
+});
+
+/* Создаем запрос на сервер из формы обратной связи */
 
 
 
