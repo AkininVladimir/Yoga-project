@@ -112,7 +112,9 @@ descBtn.addEventListener ('click', function (){
 });
  
 
-
+// git remote add origin https://github.com/AkininVladimir/axaxax.git
+// git branch -M main
+// git push -u origin main
 
 
 
