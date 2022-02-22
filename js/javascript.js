@@ -106,7 +106,69 @@ descBtn.addEventListener ('click', function (){
     this.classList.add ('fade');
 
 });
-       /*  Отправка формы запроса на сервер из модального окна */
+
+//        /*  Отправка формы запроса на сервер из модального окна */
+
+// let message = {
+//     loading: 'Загрузка...',
+//     succes : 'Спасибо! Мы скоро с Вами свяжемся',
+//     failure: 'Что-то пошло не так',
+// };
+// // создаем Объект с ответами для обратной связи сервера с пользователем
+
+// let form = document.querySelector('.main-form');
+// let input = form.getElementsByTagName('input');
+// let statusMessage = document.createElement ('div'); /* создаем новый элемент на странице для записи события обратной связи */
+    
+//     statusMessage.classList.add('status'); /* задаем стили вновь созданному элементу, класс уже есть в стилях css */
+
+//     /* Вешаем обработчик событий для формы, важно что для формы , а не для кнопки */
+// form.addEventListener ('submit', function (event) {
+//     event.preventDefault();
+//     /* Отменяем стандартное поведение формы для браузера, т.е. обновление страницы */
+//     form.appendChild(statusMessage);
+//     /* При событии submit мы в нашу форму будем добавлять div */
+
+// let request = new XMLHttpRequest ();
+//     /* создаем запрос */
+//     request.open('POST', 'server.php');
+//     /* Добавляем настройки запроса */
+//     request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+//     /* Добавляем настройки заголовков запроса */
+
+// let formData = new FormData (form);
+//     /* Получаем данные которые ввел пользователь во все input */
+//     // request.send(formData);
+
+//    /* для передачи данных в формате JSON  */
+// let  obj = {}/* создаем объект сюда будут предавать данные */
+//     formData.forEach (function(value, key ){
+//         obj[key] = value;
+//     });
+//     let json = JSON.stringify(obj);
+//     request.send(json);
+//     /* для передачи данных в формате JSON  */
+
+// request.addEventListener ('readystatechange', function (){ /* Для понимания статуса обработки запроса пользователем необходимо события обработки сервера превратить в наглядную строку */
+//     if (request.readyState < 4){
+//         statusMessage.innerHTML = message.loading;
+//     } else if (request.readyState === 4 && request.status == 200) {
+//         statusMessage.innerHTML = message.succes;
+//     } else {
+//         statusMessage.innerHTML = message.failure;
+//     }
+//     /* Создаем условия для отправки соответсвующего уведомления пользователю о статусе загрузки */
+// });
+
+// for (let i = 0; i < input.length; i++) {
+//     input[i].value = ''; 
+// }
+// /*  создаем услове для очистки полей input после отправки сообщений серверу */
+
+// });
+
+
+/*  Отправка формы запроса на сервер из модального окна при помощи promis*/
 
 let message = {
     loading: 'Загрузка...',
@@ -117,9 +179,10 @@ let message = {
 
 let form = document.querySelector('.main-form');
 let input = form.getElementsByTagName('input');
-let statusMessage = document.createElement ('div'); /* создаем новый элемент на странице для записи события обратной связи */
-    
-    statusMessage.classList.add('status'); /* задаем стили вновь созданному элементу, класс уже есть в стилях css */
+let statusMessage = document.createElement ('div'); 
+/* создаем новый элемент на странице для записи события обратной связи */
+    statusMessage.classList.add('status'); 
+/* задаем стили вновь созданному элементу, класс уже есть в стилях css */
 
     /* Вешаем обработчик событий для формы, важно что для формы , а не для кнопки */
 form.addEventListener ('submit', function (event) {
@@ -127,42 +190,50 @@ form.addEventListener ('submit', function (event) {
     /* Отменяем стандартное поведение формы для браузера, т.е. обновление страницы */
     form.appendChild(statusMessage);
     /* При событии submit мы в нашу форму будем добавлять div */
-
-let request = new XMLHttpRequest ();
-    /* создаем запрос */
-    request.open('POST', 'server.php');
-    /* Добавляем настройки запроса */
-    request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-    /* Добавляем настройки заголовков запроса */
-
-let formData = new FormData (form);
+    let formData = new FormData (form);
     /* Получаем данные которые ввел пользователь во все input */
-    // request.send(formData);
+    // request.send(formData); заменили на запросы AJAX
 
-   /* для передачи данных в формате JSON  */
-let  obj = {}/* создаем объект сюда будут предавать данные */
-    formData.forEach (function(value, key ){
-        obj[key] = value;
-    });
-    let json = JSON.stringify(obj);
-    request.send(json);
-    /* для передачи данных в формате JSON  */
+    function postData(data) {
+        return new Promise((resolt, reject) => {
+            let request = new XMLHttpRequest ();
+                /* создаем запрос */
+                request.open('POST', 'server.php');
+                /* Добавляем настройки запроса */
+                request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+                /* Добавляем настройки заголовков запроса */
+            request.onreadystatechange = function () {
+                if (request.readyState < 4){
+                    resolt()
+                } else if (request.readyState === 4 && request.status == 200) {
+                    resolt()
+                } else {
+                    reject()
+                }
+            }
+                let  obj = {}/* создаем объект, сюда будут предавать данные */
+                formData.forEach (function(value, key ){
+                    obj[key] = value;
+                });
+                let json = JSON.stringify(obj);
+                request.send(json);
+                /* для передачи данных в формате JSON  */
+        })
 
-request.addEventListener ('readystatechange', function (){ /* Для понимания статуса обработки запроса пользователем необходимо события обработки сервера превратить в наглядную строку */
-    if (request.readyState < 4){
-        statusMessage.innerHTML = message.loading;
-    } else if (request.readyState === 4 && request.status == 200) {
-        statusMessage.innerHTML = message.succes;
-    } else {
-        statusMessage.innerHTML = message.failure;
+    } /* finished postData */
+
+    function clearInpit() {
+        for (let i = 0; i < input.length; i++) {
+            input[i].value = ''; 
+        }
+        /*  создаем услове для очистки полей input после отправки сообщений серверу */
     }
-    /* Создаем условия для отправки соответсвующего уведомления пользователю о статусе загрузки */
-});
 
-for (let i = 0; i < input.length; i++) {
-    input[i].value = ''; 
-}
-/*  создаем услове для очистки полей input после отправки сообщений серверу */
+    postData(formData)
+        .then(()=> statusMessage.innerHTML = message.loading)
+        .then (() => statusMessage.innerHTML = message.succes)
+        .catch(()=> statusMessage.innerHTML = message.failure)
+        .then(clearInpit)
 
 });
 
@@ -197,6 +268,13 @@ for (let i = 0; i < input1.length; i++) {
 });
 
 /* Создаем запрос на сервер из формы обратной связи */
+
+
+/* Promise */
+
+
+
+
 
 
 
