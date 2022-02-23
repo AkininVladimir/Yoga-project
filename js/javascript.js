@@ -1,7 +1,6 @@
 // Оптимальное обявление для всех элементов на странице, которое загружает сначала дерево каталога
 window.addEventListener('DOMContentLoaded', function () {
-
-'use strict';
+    'use strict';
 
     let infoHeader = document.querySelector ('.info-header'),
         infoHeaderTab = document. querySelectorAll ('.info-header-tab'),
@@ -237,61 +236,78 @@ form.addEventListener ('submit', function (event) {
 
 });
 
-/* Создаем запрос на сервер из формы обратной связи */
+// /* Создаем запрос на сервер из формы обратной связи */
 
-let form1 = document.getElementById ('form'),
+// let form1 = document.getElementById ('form'),
+//     input1 = form1.getElementsByTagName('input');
+
+// form1.addEventListener ('submit', function(event) {
+//     event.preventDefault();
+
+// let request1 = new XMLHttpRequest ();
+//     request1.open ('POST', 'server.php');
+//     request1.setRequestHeader ('Content-Type', 'application/json; charset=utf-8'); /* ('Content-Type', 'application/x-www-form-urlencoded'); */
+
+
+// let formData1 = new FormData (form1);
+//     // request1.send(formData1);
+    
+// let obj = {};
+//  formData1.forEach(function (value, key){
+//         obj[key] = value;
+//     });
+//     let json = JSON.stringify(obj);
+
+// request1.send(json);
+
+// for (let i = 0; i < input1.length; i++) {
+//     input1[i].value = ''; 
+// }
+ 
+// });
+
+/* Создаем запрос на сервер из формы обратной связи при помощи Promise */
+
+let form1 = document.getElementById('form'),
     input1 = form1.getElementsByTagName('input');
 
 form1.addEventListener ('submit', function(event) {
     event.preventDefault();
+    let formData1 = new FormData (form1);
 
-let request1 = new XMLHttpRequest ();
-    request1.open ('POST', 'server.php');
-    request1.setRequestHeader ('Content-Type', 'application/json; charset=utf-8'); /* ('Content-Type', 'application/x-www-form-urlencoded'); */
+    function postData1 (Data) {
+        return new Promise ((resolt, reject) => {
+            let request1 = new XMLHttpRequest ();
+            request1.open ('POST', 'server.php');
+            request1.setRequestHeader ('Content-Type', 'application/json; charset=utf-8');
+            request1.onreadystatechange = function () {
+                if (request1.readyState < 4) {
+                    if  (request1.status == 200) {
+                        resolt ()
+                    } else { reject ()}
+                
+                } 
+            }
+            let  obj = {}
+            formData1.forEach (function(value, key ){
+                obj[key] = value;
+            });
+            let json = JSON.stringify(obj);
+            request1.send(json);
+            
+        }); 
+    }
 
-
-let formData1 = new FormData (form1);
-    // request1.send(formData1);
+    function clearInpit1() {
+        for (let i = 0; i < input1.length; i++) {
+            input1[i].value = ''; 
+        }
+    }
+    postData1(formData1)
+            .then( resolt => input1.value = 'Мы скоро свяжемся с Вами')  
+            .catch (error => input1.value = 'Что-то пошло не так')
+            .then(clearInpit1)
     
-let obj = {};
- formData1.forEach(function (value, key){
-        obj[key] = value;
-    });
-    let json = JSON.stringify(obj);
-
-request1.send(json);
-
-for (let i = 0; i < input1.length; i++) {
-    input1[i].value = ''; 
-}
- 
 });
 
-/* Создаем запрос на сервер из формы обратной связи */
-
-
-/* Promise */
-
-
-
-
-
-
-
-/*  */
-
-
-
-
 });
- 
-
-// git remote add origin https://github.com/AkininVladimir/axaxax.git
-// git branch -M main
-// git push -u origin main
-
-
-
-
-
-
