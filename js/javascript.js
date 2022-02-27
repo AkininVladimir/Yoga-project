@@ -359,4 +359,53 @@ form1.addEventListener ('submit', function(event) {
 
         });
 
+        /* Калькулятор */
+    
+    let optionsPeople = document.querySelectorAll('.counter-block-input') [0],
+        optionsDays = document.querySelectorAll('.counter-block-input') [1],
+        totalValue = document.getElementById('total'),
+        select = document.getElementById('select'),
+        peopleSum = 0,
+        daysSum = 0,
+        total = 0;
+
+        totalValue.innerHTML = 0; /* Обнуляем значение HTML посредством JS */
+
+        optionsPeople.addEventListener ('input', function (){ /* Навешиваем обрабдлтчик событий  */
+            peopleSum = +this.value; /* присваиваем знвечения количества людей c контектом вызова this */
+            total = (daysSum + peopleSum)*5600.30; 
+
+            if (optionsDays.value == '' || optionsPeople.value == ''|| optionsDays.value == 0 || optionsPeople.value == 0) {
+                totalValue.innerHTML = 0;
+            } else {
+                totalValue.innerHTML = total;
+            }
+        });
+
+        optionsDays.addEventListener ('input', function (){ /* Аналогично инпуту optionsPeoople */
+            daysSum = +this.value;
+            total = (daysSum + peopleSum)*4000;
+
+            if (optionsDays.value == '' || optionsPeople.value == ''|| optionsDays.value == 0 || optionsPeople.value == 0) {
+                totalValue.innerHTML = 0;
+            } else {
+                totalValue.innerHTML = total;
+            }
+        });
+    
+    select.addEventListener ('input', function (){
+        if (optionsDays.value == '' || optionsPeople.value == ''|| optionsDays.value == 0 || optionsPeople.value == 0) {
+            totalValue.innerHTML = 0;
+        } else {
+            let a = total;
+            totalValue.innerHTML = a * this.options[this.selectedIndex].value;
+        }
+
+    });
+
+
+
+
+
+
 });
